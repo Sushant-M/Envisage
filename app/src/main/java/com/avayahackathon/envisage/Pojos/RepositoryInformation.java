@@ -11,10 +11,33 @@ public class RepositoryInformation implements Serializable{
     String description;
     String homepage;
     String language;
-    public RepositoryInformation(String repname, String decs, String hpage, String lang){
+    long ID;
+
+    public RepositoryInformation(String repname, String decs, String hpage, String lang, long id){
         repo_name= repname;
         description= decs;
         homepage= hpage;
         language= lang;
+        ID = id;
+    }
+
+    public String getRepoName(){
+        return repo_name;
+    }
+
+    public String getDescription(){
+        return description;
+    }
+
+    public long getID(){
+        return ID;
+    }
+
+    public String getHomepage(){
+        return homepage;
+    }
+
+    public String getLanguage(){
+        return language;
     }
 }

@@ -3,4 +3,6 @@
     <string name="acces_token_test">1125a1f77a3d791ada97c67ca9ec844a84696652</string>
     <string name="list_of_repositories">repo_string</string>
     <string name="title_activity_detail">DetailActivity</string>
+    <string name="description_of_the_repository">repo description</string>
+    <string name="name_of_the_repository">repo name string</string>
 </resources>
