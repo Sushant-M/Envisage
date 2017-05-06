@@ -1,6 +1,11 @@
 package com.avayahackathon.envisage.Pojos;
 
+import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.RepositoryCommit;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sushant on 6/5/17.
@@ -32,6 +37,7 @@ public class RepositoryInformation implements Serializable{
     public long getID(){
         return ID;
     }
+
 
     public String getHomepage(){
         return homepage;

@@ -14,6 +14,7 @@ import android.widget.ListView;
 import com.avayahackathon.envisage.Pojos.BasicUserInfo;
 import com.avayahackathon.envisage.Pojos.RepositoryInformation;
 
+import org.eclipse.egit.github.core.CommitComment;
 import org.eclipse.egit.github.core.IRepositoryIdProvider;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryCommit;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
     ArrayAdapter<String> adapter;
     ArrayList<RepositoryInformation> repo_array= new ArrayList<RepositoryInformation>();
+    ArrayList<Repository> repository_array = new ArrayList<Repository>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,21 +74,23 @@ public class MainActivity extends AppCompatActivity {
             try {
                 for (Repository repo : service.getRepositories(params[0])) {
                     repo_list.add(repo.getName());
-                    RepositoryInformation temp_info = new
+                   /* RepositoryInformation temp_info = new
                             RepositoryInformation(repo.getName(),
                             repo.getDescription(),
                             repo.getHomepage(),
                             repo.getLanguage(),
-                            repo.getId());
-                    repo_array.add(temp_info);
-                    List<RepositoryCommit> comm_local;
+                            repo.getId());*/
+                    repository_array.add(repo);
+
+
+                    /*List<RepositoryCommit> comm_local;
                     CommitService commit_server = new CommitService(client);
                     IRepositoryIdProvider hell = repo;
                     comm_local = commit_server.getCommits(hell);
                     RepositoryCommit local = comm_local.get(0);
                     Log.d(TAG,local.toString());
-                    Log.d(TAG,"Well something worked");
-                    //System.out.println(repo.getName() + " Watchers: " + repo.getWatchers());
+
+                    Log.d(TAG,"Well something worked");*/
                 }
 
             } catch (IOException e) {

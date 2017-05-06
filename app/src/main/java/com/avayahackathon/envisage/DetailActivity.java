@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.avayahackathon.envisage.Pojos.RepositoryInformation;
 
 import org.eclipse.egit.github.core.Commit;
+import org.eclipse.egit.github.core.CommitComment;
 import org.eclipse.egit.github.core.service.CommitService;
 import org.w3c.dom.Text;
 
@@ -43,6 +44,8 @@ public class DetailActivity extends AppCompatActivity {
 
         CommitService commitService = new CommitService();
         //commit_list = commitService.getCommits();
+        CommitComment commitComment = new CommitComment();
+
     }
 
 }
