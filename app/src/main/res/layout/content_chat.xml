@@ -7,7 +7,22 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/chat_list"
-        />
+        android:id="@+id/chat_list"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:id="@+id/new_msg_edittext"
+            android:gravity="start"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:text="Send"
+            android:gravity="end"/>
+    </LinearLayout>
 
 </LinearLayout>
