@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ public class DetailActivity extends AppCompatActivity {
     ListView our_list;
     ArrayAdapter<String> adapter;
     ArrayList<String> commit_array = new ArrayList<String>();
+    ArrayList<String> to_apply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +69,17 @@ public class DetailActivity extends AppCompatActivity {
         commitService = new CommitService();
         //commit_list = commitService.getCommits();
         new getCommitInfo().execute();
-    }
 
+        our_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
+                String name= to_apply.get(position);
+                intent.putExtra("name",name);
+                startActivity(intent);
+            }
+        });
+    }
 
 
     public class getCommitInfo extends AsyncTask<String,Void,List<RepositoryCommit>>{
@@ -88,14 +99,12 @@ public class DetailActivity extends AppCompatActivity {
             super.onPostExecute(commits);
             if(commits != null){
 
-
                 adapter.clear();
-                ArrayList<String> to_apply = new ArrayList<String>();
+                to_apply = new ArrayList<String>();
                 for(RepositoryCommit comm : commits){
                     String msg = comm.getCommit().getMessage();
                     to_apply.add(msg);
                 }
-
                 adapter.addAll(to_apply);
             }
         }

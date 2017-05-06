@@ -5,4 +5,5 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="description_of_the_repository">repo description</string>
     <string name="name_of_the_repository">repo name string</string>
+    <string name="title_activity_chat">ChatActivity</string>
 </resources>
