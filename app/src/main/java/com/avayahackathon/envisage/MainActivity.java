@@ -53,9 +53,10 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                RepositoryInformation local_repo = repo_array.get(position);
+                Repository local_repo = repository_array.get(position);
                 Intent launch_intent = new Intent(getApplicationContext(),DetailActivity.class);
-                launch_intent.putExtra("details",local_repo);
+                RepositoryInformation repo_info = new RepositoryInformation(local_repo);
+                launch_intent.putExtra("details",repo_info);
                 startActivity(launch_intent);
             }
         });

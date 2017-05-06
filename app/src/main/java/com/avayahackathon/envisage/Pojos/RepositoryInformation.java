@@ -1,6 +1,7 @@
 package com.avayahackathon.envisage.Pojos;
 
 import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryCommit;
 
 import java.io.Serializable;
@@ -17,6 +18,7 @@ public class RepositoryInformation implements Serializable{
     String homepage;
     String language;
     long ID;
+    Repository repository;
 
     public RepositoryInformation(String repname, String decs, String hpage, String lang, long id){
         repo_name= repname;
@@ -24,7 +26,14 @@ public class RepositoryInformation implements Serializable{
         homepage= hpage;
         language= lang;
         ID = id;
+
     }
+
+    public RepositoryInformation(Repository repo){
+        repository = repo;
+    }
+
+    public Repository getRepoObject(){return repository;}
 
     public String getRepoName(){
         return repo_name;

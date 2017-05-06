@@ -1,6 +1,7 @@
 package com.avayahackathon.envisage;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,14 +15,21 @@ import com.avayahackathon.envisage.Pojos.RepositoryInformation;
 
 import org.eclipse.egit.github.core.Commit;
 import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryCommit;
 import org.eclipse.egit.github.core.service.CommitService;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
     private final String TAG = getClass().getSimpleName();
+    Repository global_repository_object;
+    CommitService commitService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,14 +46,40 @@ public class DetailActivity extends AppCompatActivity {
         RepositoryInformation local_repo = (RepositoryInformation)intent.getSerializableExtra("details");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        name.setText(local_repo.getRepoName());
-        description.setText(local_repo.getDescription());
-        language.setText(local_repo.getLanguage());
+        name.setText(local_repo.getRepoObject().getName());
+        description.setText(local_repo.getRepoObject().getDescription());
+        language.setText(local_repo.getRepoObject().getLanguage());
 
-        CommitService commitService = new CommitService();
+        global_repository_object = local_repo.getRepoObject();
+
+        commitService = new CommitService();
         //commit_list = commitService.getCommits();
-        CommitComment commitComment = new CommitComment();
+        new getCommitInfo().execute();
+    }
 
+
+
+    public class getCommitInfo extends AsyncTask<String,Void,List<RepositoryCommit>>{
+        @Override
+        protected List<RepositoryCommit> doInBackground(String... params) {
+            try {
+                List<RepositoryCommit> temporary = commitService.getCommits(global_repository_object);
+                return temporary;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<RepositoryCommit> commits) {
+            super.onPostExecute(commits);
+            if(commits != null){
+                RepositoryCommit hello = commits.get(0);
+                Log.d(TAG, String.valueOf(hello.getAuthor()));
+                Log.d(TAG, String.valueOf(hello.getCommit()));
+            }
+        }
     }
 
 }
