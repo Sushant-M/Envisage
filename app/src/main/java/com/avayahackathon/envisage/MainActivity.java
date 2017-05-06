@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.avayahackathon.envisage.Communication.SDKManager;
 import com.avayahackathon.envisage.Pojos.BasicUserInfo;
 import com.avayahackathon.envisage.Pojos.RepositoryInformation;
 
@@ -39,6 +40,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SDKManager.getInstance(this).setupClientConfiguration(getApplication());
+
+        // Configure and create User
+        SDKManager.getInstance(this).setupUserConfiguration();
+
         setContentView(R.layout.activity_main);
 
         String token = "1125a1f77a3d791ada97c67ca9ec844a84696652";

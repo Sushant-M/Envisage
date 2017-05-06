@@ -5,4 +5,94 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="description_of_the_repository">repo description</string>
     <string name="name_of_the_repository">repo name string</string>
+
+    <!--string name="app_name" translatable="false">SdkSampleApp</string-->
+    <string name="productName" translatable="false">Test Application</string>
+    <string name="productVersion" translatable="false">1.0</string>
+    <string name="buildNumber" translatable="false">1</string>
+    <string name="vendorName" translatable="false">Avaya</string>
+    <string name="dataDirectory" translatable="false">data</string>
+
+    <!-- Layouts -->
+    <!-- Start fragment -->
+    <string name="settings_item">Settings</string>
+    <string name="calls_item">Call Service</string>
+    <string name="contacts_item">Contacts Service</string>
+    <string name="callLogs_item">Call Log</string>
+    <string name="messaging">Conversation list</string>
+    <string name="about">About</string>
+    <string name="webCollaboration">Web Collaboration</string>
+
+    <!-- Settings fragment-->
+    <string name="call_service">Call Service</string>
+    <string name="amm_service">AMM Service</string>
+    <string name="amm_service_enable">Enable AMM</string>
+
+    <!-- Settings call service fragment-->
+    <string name="server_address">Address</string>
+    <string name="server_port">Port</string>
+    <string name="server_domain">Domain</string>
+    <string name="server_tls">TLS</string>
+    <string name="user_extension">Extension</string>
+    <string name="user_password">Password</string>
+    <string name="status">Status:</string>
+    <string name="logged_in">Logged in</string>
+    <string name="logged_off">Logged off</string>
+    <string name="apply">Apply</string>
+
+    <!-- Call init fragment-->
+    <string name="number_to_call">Number to call</string>
+    <string name="make_audio_call">Make Audio Call</string>
+    <string name="make_video_call">Make Video Call</string>
+    <string name="send_all_calls">Send All Calls</string>
+
+    <!-- Call active fragment-->
+    <string name="active_call">Active Call</string>
+    <string name="call_duration">Call duration: </string>
+    <string name="call_state">Call state: </string>
+    <string name="participants">Participants:</string>
+    <string name="end_call">End call</string>
+    <string name="mute_audio">Mute</string>
+    <string name="speakerphone">Speakerphone</string>
+    <string name="lock_meeting">Lock meeting</string>
+    <string name="send_digits">DTMF:</string>
+    <string name="ringing">Ringing</string>
+    <string name="established">Established</string>
+    <string name="ended">Ended</string>
+
+    <!-- Incoming call dialog-->
+    <string name="ignore">Ignore</string>
+    <string name="accept">Accept</string>
+    <string name="incoming_call">Incoming call</string>
+    <string name="ok">OK</string>
+
+    <!-- Contacts service fragment -->
+    <string name="add_contact">Add Contact</string>
+
+    <!-- Add contact fragment -->
+    <string name="firstName">First Name</string>
+    <string name="lastName">Last Name</string>
+    <string name="phoneNumber">Phone</string>
+    <string name="emailAddress">E-mail</string>
+
+
+    <!-- Call log and messaging-->
+    <string name="display_name">Display name</string>
+    <string name="initial_time">00:00</string>
+    <string name="send">Send</string>
+    <string name="new_chat">New chat</string>
+    <string name="open">Open</string>
+    <string name="create">Create</string>
+    <string name="messaging_header">Messaging</string>
+    <string name="del_call_log">delete call log</string>
+    <string name="del_conversation">delete conversation</string>
+    <string name="refresh">Refresh</string>
+
+    <!-- About screen-->
+    <string name="sample_app_version">Sample App version</string>
+    <string name="sdk_version">CSDK version</string>
+    <string name="build_date">Build date: </string>
+
+    <!-- WC screen-->
+    <string name="close_sharing">Close</string>
 </resources>
