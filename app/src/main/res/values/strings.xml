@@ -95,4 +95,6 @@
 
     <!-- WC screen-->
     <string name="close_sharing">Close</string>
+
+    <string name="title_activity_chat">Chat Activity</string>
 </resources>

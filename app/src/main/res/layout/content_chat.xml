@@ -4,9 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <com.github.bassaer.chatmessageview.views.ChatView
-        android:id="@+id/chat_view"
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:id="@+id/chat_list"
+        />
 
 </LinearLayout>
