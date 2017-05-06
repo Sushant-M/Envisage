@@ -74,8 +74,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(getApplicationContext(),ChatActivity.class);
-                String name= to_apply.get(position);
-                intent.putExtra("name",name);
+                String nametosend= to_apply.get(position);
+                intent.putExtra("name",nametosend);
                 startActivity(intent);
             }
         });
