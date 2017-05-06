@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "688498734981",
+    "firebase_url": "https://envisage-a381a.firebaseio.com",
+    "project_id": "envisage-a381a",
+    "storage_bucket": "envisage-a381a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688498734981:android:9b8d3f13a9e463ec",
+        "android_client_info": {
+          "package_name": "com.avayahackathon.envisage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688498734981-ktudtck83e8oc30n2lsuv7m8uivtm9cb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.avayahackathon.envisage",
+            "certificate_hash": "8950de76f76f7943c24d0d4061efbaa6ea13f6d8"
+          }
+        },
+        {
+          "client_id": "688498734981-3uds48j06shhb22bgsbo63fg0nnq2vs4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiamzykqlPB73fvTIIAu409oVcMOOCBDA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688498734981-3uds48j06shhb22bgsbo63fg0nnq2vs4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
