@@ -2,27 +2,55 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:weightSum="1">
 
     <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/chat_list"/>
+        android:layout_height="375dp"
+        android:id="@+id/chat_list"
+        android:layout_weight="0.50"/>
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <EditText
-            android:layout_width="250dp"
+            android:layout_width="191dp"
             android:layout_height="wrap_content"
             android:textSize="13sp"
             android:id="@+id/new_msg_edittext"
             android:gravity="start"/>
+
         <Button
+            android:id="@+id/to_send"
+            android:layout_width="129dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="Send"
+            android:textAlignment="center"
+            android:textSize="17sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/call_button"
+            android:layout_width="62dp"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:onClick="callbtn"
+            android:text="Call"/>
+
+        <Button
+            android:id="@+id/end_call"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:text="Send"
-            android:gravity="end"/>
+            android:gravity="end"
+            android:onClick="cancel_call"
+            android:text="End Call"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -11,6 +11,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.avaya.clientservices.messaging.MessagingService;
+import com.avayahackathon.envisage.Communication.ConversationItem;
+import com.avayahackathon.envisage.Communication.MessagingManager;
 import com.avayahackathon.envisage.Communication.SDKManager;
 import com.avayahackathon.envisage.Pojos.BasicUserInfo;
 import com.avayahackathon.envisage.Pojos.RepositoryInformation;
@@ -30,12 +33,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    String TAG = getClass().getSimpleName();
     GitHubClient client;
     ArrayList<String> local_arr = new ArrayList<String>();
     ListView listView;
     ArrayAdapter<String> adapter;
     ArrayList<RepositoryInformation> repo_array= new ArrayList<RepositoryInformation>();
     ArrayList<Repository> repository_array = new ArrayList<Repository>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

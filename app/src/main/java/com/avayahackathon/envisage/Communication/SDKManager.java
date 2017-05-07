@@ -13,8 +13,15 @@ import android.util.SparseArray;
 import android.widget.Toast;
 
 import com.avaya.clientservices.call.Call;
+import com.avaya.clientservices.call.CallCompletionHandler;
+import com.avaya.clientservices.call.CallEndReason;
+import com.avaya.clientservices.call.CallException;
+import com.avaya.clientservices.call.CallListener;
 import com.avaya.clientservices.call.CallService;
 import com.avaya.clientservices.call.CallServiceListener;
+import com.avaya.clientservices.call.DTMFType;
+import com.avaya.clientservices.call.VideoChannel;
+import com.avaya.clientservices.call.VideoMode;
 import com.avaya.clientservices.client.Client;
 import com.avaya.clientservices.client.ClientConfiguration;
 import com.avaya.clientservices.client.ClientListener;
@@ -35,6 +42,7 @@ import com.avaya.clientservices.media.VoIPConfigurationAudio;
 import com.avaya.clientservices.media.VoIPConfigurationVideo;
 import com.avaya.clientservices.media.capture.VideoCamera;
 import com.avaya.clientservices.media.capture.VideoCaptureController;
+import com.avaya.clientservices.media.capture.VideoCaptureException;
 import com.avaya.clientservices.presence.PresenceConfiguration;
 import com.avaya.clientservices.provider.amm.AMMConfiguration;
 import com.avaya.clientservices.provider.media.MediaConfiguration;
@@ -47,13 +55,14 @@ import com.avaya.clientservices.user.UserRegistrationListener;
 import com.avayahackathon.envisage.R;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Created by yogita on 6/5/17.
  */
 
-public class SDKManager implements UserRegistrationListener,CredentialProvider,ClientListener, CallServiceListener {
+public class SDKManager implements UserRegistrationListener,CredentialProvider,ClientListener, CallServiceListener,CallListener {
     private static final String LOG_TAG = SDKManager.class.getSimpleName();
 
     public static final String CLIENTSDK_TEST_APP_PREFS = "com.avaya.android.prefs";
@@ -219,13 +228,11 @@ public class SDKManager implements UserRegistrationListener,CredentialProvider,C
     // Configure and create mUser
     public void setupUserConfiguration() {
         // Initialize shared preferences
-        settings = activity.getSharedPreferences(CLIENTSDK_TEST_APP_PREFS, Context.MODE_PRIVATE);
-        // Getting SIP configuration details from settings
-        String address = settings.getString(ADDRESS, "svsm01.avaya.com");
-        int port = settings.getInt(PORT, 5061);
-        String domain = settings.getString(DOMAIN, "svucacloud.com");
-        boolean useTls = settings.getBoolean(USE_TLS, true);
-        String extension = settings.getString(EXTENSION, "66078141");
+        String address = "svsm01.avaya.com";//settings.getString(ADDRESS, "svsm01.avaya.com");
+        int port = 5061;//settings.getInt(PORT, 5061);
+        String domain = "svucacloud.com";//settings.getString(DOMAIN, "");
+        boolean useTls = true;//settings.getBoolean(USE_TLS, true);
+        String extension = "66078141";//settings.getString(EXTENSION, "");
 
         // Create SIP configuration
         userConfiguration = new UserConfiguration();
@@ -279,7 +286,7 @@ public class SDKManager implements UserRegistrationListener,CredentialProvider,C
         CredentialProvider credentialProvider = new CredentialProvider() {
             @Override
             public void onAuthenticationChallenge(Challenge challenge, CredentialCompletionHandler credentialCompletionHandler) {
-                credentialCompletionHandler.onCredentialProvided(new UserCredential("hackathon"+EXTENSION,"Hack#2017"));
+                credentialCompletionHandler.onCredentialProvided(new UserCredential("hackathon66078141","Hack#2017"));
             }
 
             @Override
@@ -292,9 +299,9 @@ public class SDKManager implements UserRegistrationListener,CredentialProvider,C
                 Toast.makeText(activity,"AMM ERROR",Toast.LENGTH_SHORT).show();
             }
         };
-        String ammServerAddress = settings.getString(SDKManager.AMM_ADDRESS, "svamm.avaya.com");
-        int ammPort = settings.getInt(SDKManager.AMM_PORT, 8443);
-        int pollIntervalInMinutes = settings.getInt(SDKManager.AMM_REFRESH, 0);
+        String ammServerAddress = "svamm.avaya.com";//settings.getString(SDKManager.AMM_ADDRESS, "svamm.avaya.com");
+        int ammPort = 8443;//settings.getInt(SDKManager.AMM_PORT, 8443);
+        int pollIntervalInMinutes = 0;//settings.getInt(SDKManager.AMM_REFRESH, 0);
         if (!ammServerAddress.isEmpty()) {
             isAMMEnabled = true;
         }
@@ -502,7 +509,8 @@ public class SDKManager implements UserRegistrationListener,CredentialProvider,C
 
     @Override
     public void onIncomingCallReceived(CallService callService, Call call) {
-
+call.accept();
+        Log.d("SDK","income");
     }
 
     @Override
@@ -527,6 +535,288 @@ public class SDKManager implements UserRegistrationListener,CredentialProvider,C
 
     @Override
     public void onActiveCallChanged(CallService callService, Call call) {
+
+    }
+    public static int getActiveVideoChannel() {
+        return activeVideoChannel;
+    }
+
+    public static void setActiveVideoChannel(int activeVideoChannel) {
+        SDKManager.activeVideoChannel = activeVideoChannel;
+    }
+
+    // Return the call with specified call id if it is not removed yet
+    public CallWrapper getCallWrapperByCallId(int callId) {
+        return callsMap.get(callId);
+    }
+
+    // Create call object, set the number, add to call map and return call object
+    public CallWrapper createCall(String calledParty) {
+        // Create call
+        CallService callService = mUser.getCallService();
+        Call call = callService.createCall();
+        // Set far-end's number
+        call.setRemoteAddress(calledParty);
+        // Get unique call id specified for created call
+        int callId = call.getCallId();
+
+        CallWrapper callWrapper = new CallWrapper(call);
+
+        // Add the call to call Map
+        callsMap.put(callId, callWrapper);
+        return callWrapper;
+    }
+
+
+    public void startCall(CallWrapper callWrapper) {
+
+        Call call = callWrapper.getCall();
+        // Subscribe to call state events
+        call.addListener(this);
+
+        // Add video to the call
+        if (callWrapper.isVideoCall()) {
+            addVideo(call);
+        }
+
+        if (call.isIncoming()) {
+            Log.d(LOG_TAG, "Incoming call accepted");
+            // Accept the call if it is incoming call
+            call.accept();
+        } else {
+            Log.d(LOG_TAG, "Outgoing call started");
+            // Start the call if it is outgoing call
+            call.start();
+        }
+    }
+
+    // Create video chanel and set it for the call
+    private void addVideo(Call call) {
+        // Check if video supported
+        if (!call.getUpdateVideoModeCapability().isAllowed()) {
+            Log.d(LOG_TAG, "Don't add video. Video isn't supported");
+            return;
+        } else if (call.isIncoming() && call.getIncomingVideoStatus()
+                != Call.IncomingVideoStatus.SUPPORTED) {
+            Log.d(LOG_TAG, "Don't add video. Far-end didn't send video information");
+            return;
+        }
+
+        // Set video mode for the call depending on camera device
+        call.setVideoMode(setupCamera(), new CallCompletionHandler() {
+            @Override
+            public void onSuccess() {
+                Log.d(LOG_TAG, "Video mode has been set");
+            }
+
+            @Override
+            public void onError(CallException e) {
+                Log.e(LOG_TAG, "Video mode can't be set. Exception: " + e.getError());
+            }
+        });
+    }
+
+    // Set the camera and return video mode for initializing video
+    private VideoMode setupCamera() {
+        // Check if device has camera
+        VideoCaptureController videoCaptureController = getVideoCaptureController();
+        try {
+            if (videoCaptureController.hasVideoCamera(VideoCamera.Front)) {
+                currentCamera = VideoCamera.Front;
+                return VideoMode.SEND_RECEIVE;
+            } else if (videoCaptureController.hasVideoCamera(VideoCamera.Back)) {
+                currentCamera = VideoCamera.Back;
+                return VideoMode.SEND_RECEIVE;
+            }
+        } catch (VideoCaptureException e) {
+            Log.e(LOG_TAG, "Camera can't be set. Exception: " + e.getLocalizedMessage());
+            return VideoMode.RECEIVE_ONLY;
+        }
+        // No cameras found
+        return VideoMode.RECEIVE_ONLY;
+    }
+
+    // Send one DTMF digit to the call
+    public void sendDTMF(Call call, char char_digit) {
+        //Convert char to DTMF
+        DTMFType DTMF_digit = parseToDTMF(char_digit);
+        call.sendDTMF(DTMF_digit);
+    }
+
+    // Function for convert char to DTMF
+    private DTMFType parseToDTMF(char digit) {
+        switch (digit) {
+            case '1':
+                return DTMFType.ONE;
+            case '2':
+                return DTMFType.TWO;
+            case '3':
+                return DTMFType.THREE;
+            case '4':
+                return DTMFType.FOUR;
+            case '5':
+                return DTMFType.FIVE;
+            case '6':
+                return DTMFType.SIX;
+            case '7':
+                return DTMFType.SEVEN;
+            case '8':
+                return DTMFType.EIGHT;
+            case '9':
+                return DTMFType.NINE;
+            case '0':
+                return DTMFType.ZERO;
+            case '#':
+                return DTMFType.POUND;
+            case '*':
+                return DTMFType.STAR;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onCallStarted(Call call) {
+
+    }
+
+    @Override
+    public void onCallRemoteAlerting(Call call, boolean b) {
+
+    }
+
+    @Override
+    public void onCallRedirected(Call call) {
+
+    }
+
+    @Override
+    public void onCallQueued(Call call) {
+
+    }
+
+    @Override
+    public void onCallEstablished(Call call) {
+
+    }
+
+    @Override
+    public void onCallRemoteAddressChanged(Call call, String s, String s1) {
+
+    }
+
+    @Override
+    public void onCallHeld(Call call) {
+
+    }
+
+    @Override
+    public void onCallUnheld(Call call) {
+
+    }
+
+    @Override
+    public void onCallHeldRemotely(Call call) {
+
+    }
+
+    @Override
+    public void onCallUnheldRemotely(Call call) {
+
+    }
+
+    @Override
+    public void onCallJoined(Call call) {
+
+    }
+
+    @Override
+    public void onCallEnded(Call call, CallEndReason callEndReason) {
+
+    }
+
+    @Override
+    public void onCallFailed(Call call, CallException e) {
+
+    }
+
+    @Override
+    public void onCallDenied(Call call) {
+
+    }
+
+    @Override
+    public void onCallIgnored(Call call) {
+
+    }
+
+    @Override
+    public void onCallAudioMuteStatusChanged(Call call, boolean b) {
+
+    }
+
+    @Override
+    public void onCallSpeakerSilenceStatusChanged(Call call, boolean b) {
+
+    }
+
+    @Override
+    public void onCallVideoChannelsUpdated(Call call, List<VideoChannel> list) {
+
+    }
+
+    @Override
+    public void onCallIncomingVideoAddRequestReceived(Call call) {
+
+    }
+
+    @Override
+    public void onCallIncomingVideoAddRequestAccepted(Call call, VideoChannel videoChannel) {
+
+    }
+
+    @Override
+    public void onCallIncomingVideoAddRequestDenied(Call call) {
+
+    }
+
+    @Override
+    public void onCallIncomingVideoAddRequestTimedOut(Call call) {
+
+    }
+
+    @Override
+    public void onCallConferenceStatusChanged(Call call, boolean b) {
+
+    }
+
+    @Override
+    public void onCallCapabilitiesChanged(Call call) {
+
+    }
+
+    @Override
+    public void onCallServiceAvailable(Call call) {
+
+    }
+
+    @Override
+    public void onCallServiceUnavailable(Call call) {
+
+    }
+
+    @Override
+    public void onCallParticipantMatchedContactsChanged(Call call) {
+
+    }
+
+    @Override
+    public void onCallDigitCollectionPlayDialTone(Call call) {
+
+    }
+
+    @Override
+    public void onCallDigitCollectionCompleted(Call call) {
 
     }
 }

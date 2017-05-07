@@ -16,7 +16,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="345dp"
+            android:layout_width="301dp"
             android:layout_height="95dp"
             android:orientation="vertical">
 
@@ -38,19 +38,21 @@
 
         <TextView
             android:id="@+id/repo_language"
-            android:layout_width="57dp"
+            android:layout_width="87dp"
             android:layout_height="wrap_content"
             android:background="#90CAF9"
             android:gravity="top"
             android:text="C"
             android:textColor="#37474F"
-            android:textSize="40dp"/>
+            android:textSize="32sp"/>
 
     </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/blueGray400"
+        android:gravity="center_horizontal"
         android:text="Commits:"
         android:textSize="20dp"
         />
